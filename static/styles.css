@@ -28,3 +28,5 @@
 .converter-result{margin-top:18px;border:1px solid #dce5de;border-radius:10px;background:#f8faf8;padding:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;color:#40564d}.converter-result strong{font-size:18px;color:#173f35}.converter-result small{display:block;width:100%;color:#6c7d74}.api-panel form>button{margin-top:16px;width:100%}
 .ledger td:nth-child(3){text-transform:none}.ledger th,.ledger td{vertical-align:middle}
 @media(max-width:800px){.savings-summary{align-items:flex-start;flex-direction:column}.chart-label{align-items:flex-start}.chart-value{flex-wrap:wrap;justify-content:flex-end}}
+
+#savings-form > button{margin-top:16px}
