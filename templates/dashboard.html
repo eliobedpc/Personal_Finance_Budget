@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Balance | Personal Budget Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <script defer src="{{ url_for('static', filename='dashboard.js') }}"></script>
+</head>
+<body>
+<header>
+  <a class="brand" href="/">◈ Balance<span>PERSONAL FINANCE</span></a>
+  <span class="badge">CLASS PROJECT · LOCAL DEMO</span>
+</header>
+
+<main>
+  <section class="intro">
+    <div>
+      <p class="eyebrow">A LITTLE CLARITY, EVERY MONTH</p>
+      <h1>Your money, at a glance.</h1>
+      <p>Track what comes in. Understand what goes out.</p>
+    </div>
+    <button id="demo" class="secondary">Load sample month</button>
+  </section>
+
+  <p class="notice">Your data is saved in this browser automatically. USD · No bank account connection required.</p>
+  <div id="status" class="app-message" role="status" aria-live="polite" hidden></div>
+
+  <section class="stats" aria-label="Financial summary">
+    <article><p>Total income</p><strong id="income">$0.00</strong><small>Money coming in</small></article>
+    <article><p>Total expenses</p><strong id="expenses">$0.00</strong><small>Money going out</small></article>
+    <article class="highlight"><p>Money remaining</p><strong id="remaining">$0.00</strong><small>Income minus expenses</small></article>
+    <article>
+      <p>Monthly budget</p>
+      <strong id="budget-used">N/A</strong>
+      <small id="budget-status">No budget set</small>
+      <div class="budget-progress" aria-hidden="true"><div id="budget-progress-bar"></div></div>
+      <small id="income-spent">Income spent: N/A</small>
+    </article>
+  </section>
+
+  <section class="tip-ticker" aria-label="Research-backed financial tip">
+    <span class="tip-label">RESEARCH-BACKED TIP</span>
+    <div class="tip-window">
+      <div id="tip-track" class="tip-track">
+        <span id="tip-text">Add or import transactions to receive a financial tip.</span>
+        <a id="tip-source" href="#" target="_blank" rel="noopener" hidden>Source</a>
+      </div>
+    </div>
+  </section>
+  <p class="tip-disclaimer">Educational information only, not individualized financial or investment advice.</p>
+
+  <div class="layout">
+    <section class="panel">
+      <div class="section-head"><h2 id="transaction-heading">Add a transaction</h2><span id="edit-badge" class="badge" hidden>EDITING</span></div>
+      <p class="muted">Enter income or expenses. Custom categories are supported.</p>
+
+      <form id="transaction-form" novalidate>
+        <div class="fields">
+          <div>
+            <label for="type">Transaction type</label>
+            <select id="type"><option value="expense">Expense</option><option value="income">Income</option></select>
+          </div>
+          <div>
+            <label for="transaction-date">Date</label>
+            <input id="transaction-date" type="date">
+          </div>
+        </div>
+
+        <label for="description">Description</label>
+        <input id="description" maxlength="60" placeholder="e.g. Groceries">
+
+        <div class="fields">
+          <div>
+            <label for="amount">Amount ($)</label>
+            <input id="amount" type="number" min="0.01" max="10000000" step="0.01" placeholder="0.00">
+          </div>
+          <div>
+            <label for="category">Category</label>
+            <select id="category">
+              <option>Housing</option><option>Food</option><option>Transport</option><option>Entertainment</option><option>Utilities</option><option>Other</option><option value="__custom__">Custom...</option>
+            </select>
+            <input id="custom-category" class="custom-category" maxlength="30" placeholder="e.g. Pets" hidden>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button id="transaction-submit" type="submit">Add transaction</button>
+          <button id="cancel-edit" type="button" class="secondary" hidden>Cancel edit</button>
+        </div>
+      </form>
+
+      <form id="budget-form" class="budget-form" novalidate>
+        <label for="budget">Monthly expense budget ($)</label>
+        <div class="fields">
+          <input id="budget" type="number" min="0" max="10000000" step="0.01" value="0">
+          <button type="submit" class="secondary">Set budget</button>
+        </div>
+        <small>Set to 0 to clear your budget.</small>
+      </form>
+    </section>
+
+    <section class="panel">
+      <div class="section-head"><h2>Where your money goes</h2><span class="badge">EXPENSES</span></div>
+      <p class="muted">Each bar shows a category's share of total spending. Small shares remain visible without rounding to 0.0%.</p>
+      <div id="chart" aria-label="Spending by category"></div>
+      <p class="chart-note">Custom categories such as Pets are included automatically.</p>
+    </section>
+  </div>
+
+  <section class="visual-grid" aria-label="Budget visualizations">
+    <section class="panel">
+      <div class="section-head"><h2>Cash flow snapshot</h2><span class="badge">INCOME VS SPENDING</span></div>
+      <p class="muted">Compare income, expenses, and the amount remaining this month.</p>
+      <div id="cash-flow-chart" class="cash-flow-chart"></div>
+    </section>
+
+    <section class="panel">
+      <div class="section-head"><h2>Income allocation</h2><span class="badge">SPENT VS REMAINING</span></div>
+      <p class="muted">See how much of your income has been spent and how much remains.</p>
+      <div class="allocation-wrap">
+        <div id="allocation-donut" class="allocation-donut" role="img" aria-label="Income allocation">
+          <div class="allocation-center"><strong id="allocation-percent">N/A</strong><span>spent</span></div>
+        </div>
+        <div class="allocation-legend">
+          <p><span class="legend-dot spent-dot"></span>Spent <strong id="allocation-spent">$0.00</strong></p>
+          <p><span class="legend-dot remaining-dot"></span>Remaining <strong id="allocation-remaining">$0.00</strong></p>
+          <p id="allocation-note" class="muted">Add income to calculate allocation.</p>
+        </div>
+      </div>
+    </section>
+  </section>
+
+  <section class="visual-grid">
+    <section class="panel">
+      <div class="section-head"><h2>Savings goal</h2><span class="badge">PROGRESS</span></div>
+      <p class="muted">Set a goal and the amount you have saved so far.</p>
+      <form id="savings-form" novalidate>
+        <div class="fields">
+          <div><label for="savings-goal">Goal ($)</label><input id="savings-goal" type="number" min="0" step="0.01" value="0"></div>
+          <div><label for="savings-saved">Saved so far ($)</label><input id="savings-saved" type="number" min="0" step="0.01" value="0"></div>
+        </div>
+        <button type="submit" class="secondary">Update savings goal</button>
+      </form>
+      <div class="savings-progress"><div id="savings-progress-bar"></div></div>
+      <div class="savings-summary"><strong id="savings-percent">No goal set</strong><span id="savings-message">Set a savings goal to track progress.</span></div>
+    </section>
+
+    <section class="panel api-panel">
+      <div class="section-head"><h2>Money converter</h2><span class="badge">PUBLIC API</span></div>
+      <p class="muted">Convert an amount using current Frankfurter exchange-rate data.</p>
+      <form id="converter-form" novalidate>
+        <label for="convert-amount">Amount</label>
+        <input id="convert-amount" type="number" min="0" step="0.01" placeholder="100.00">
+        <div class="fields">
+          <div><label for="convert-from">From</label><select id="convert-from"><option>USD</option><option>EUR</option><option>GBP</option><option>MXN</option><option>CAD</option><option>JPY</option></select></div>
+          <div><label for="convert-to">To</label><select id="convert-to"><option>EUR</option><option>USD</option><option>GBP</option><option>MXN</option><option>CAD</option><option>JPY</option></select></div>
+        </div>
+        <button type="submit">Convert money</button>
+      </form>
+      <div id="converter-result" class="converter-result">Enter an amount to convert.</div>
+    </section>
+  </section>
+
+  <section class="panel api-panel">
+    <div class="section-head"><h2>Current exchange rates</h2><span class="badge">REFERENCE</span></div>
+    <p class="muted">Latest reference rates from the Frankfurter public API. USD is the base currency.</p>
+    <div id="exchange-rates" class="exchange-grid"><p>Loading current exchange rates...</p></div>
+    <p id="exchange-date" class="chart-note"></p>
+  </section>
+
+  <section class="panel ledger">
+    <div class="section-head">
+      <h2>Transactions</h2>
+      <div class="ledger-actions">
+        <span id="count" class="badge">0 ENTRIES</span>
+        <button id="import" type="button" class="secondary">Import Excel</button>
+        <button id="export" type="button" class="secondary">Export Excel</button>
+        <button id="clear-saved" type="button" class="secondary danger-lite">Clear saved data</button>
+        <input id="import-file" type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden>
+      </div>
+    </div>
+    <p class="muted">Import/export supports Date, Description, Type, Category, and Amount. Older files without Date still work.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Date</th><th>Description</th><th>Type</th><th>Category</th><th>Amount</th><th><span class="sr-only">Actions</span></th></tr></thead>
+        <tbody id="transactions"></tbody>
+      </table>
+    </div>
+    <p id="empty">No transactions yet. Add one above or load the sample month.</p>
+  </section>
+</main>
+
+<footer>Balance / Personal Finance & Budget Dashboard · Python + Flask Group Project</footer>
+</body>
+</html>
