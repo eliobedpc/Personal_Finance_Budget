@@ -107,12 +107,6 @@ NUMERIC_COLUMNS = [
 
 
 def acquire_dataset():
-    """
-    Load the South German Credit dataset.
-
-    If a local CSV already exists, use it. Otherwise, download the official
-    UCI ZIP archive directly and save a local CSV copy for reproducibility.
-    """
     DATA_DIR.mkdir(parents=True, exist_ok=True)
 
     if DATA_FILE.exists():
