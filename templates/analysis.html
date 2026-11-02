@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Data Science Analysis | Balance</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+<header>
+  <a class="brand" href="/">◈ Balance<span>PERSONAL FINANCE</span></a>
+  <div class="header-links"><a class="secondary nav-link" href="/">Budget Dashboard</a><span class="badge">MIDTERM DATA SCIENCE</span></div>
+</header>
+<main>
+  <section class="intro"><div><p class="eyebrow">LESSONS 05–07 · EDA + MACHINE LEARNING</p><h1>Credit-risk data science analysis.</h1><p>Public dataset acquisition, cleaning, preprocessing, visualization, modeling, and evaluation.</p></div></section>
+  {% if not results %}
+  <section class="panel analysis-empty"><h2>Analysis results have not been generated yet</h2><p>Install the requirements and run:</p><pre>python data_analysis.py</pre><p>Then refresh this page.</p></section>
+  {% else %}
+  <section class="analysis-stats">
+    <article class="panel"><p>Dataset</p><strong>{{ results.dataset.name }}</strong><small>{{ results.dataset.rows }} cleaned rows</small></article>
+    <article class="panel"><p>Logistic F1</p><strong>{{ '%.1f'|format(results.models.logistic_regression.f1 * 100) }}%</strong><small>Test-set F1 score</small></article>
+    <article class="panel"><p>Random Forest F1</p><strong>{{ '%.1f'|format(results.models.random_forest.f1 * 100) }}%</strong><small>Test-set F1 score</small></article>
+    <article class="panel"><p>Preprocessing</p><strong>3</strong><small>Engineering · scaling · encoding</small></article>
+  </section>
+  <section class="panel"><div class="section-head"><h2>Dataset and cleaning</h2><span class="badge">UCI · ID 522</span></div><p class="muted">South German Credit is a public finance/credit dataset used here to classify good vs. bad credit risk.</p><div class="analysis-table-wrap"><table><tbody>
+  <tr><th>Starting rows</th><td>{{ results.cleaning.starting_rows }}</td></tr><tr><th>Duplicates removed</th><td>{{ results.cleaning.duplicate_rows_removed }}</td></tr><tr><th>Missing cells before cleaning</th><td>{{ results.cleaning.missing_cells_before_cleaning }}</td></tr><tr><th>Invalid rows removed</th><td>{{ results.cleaning.invalid_rows_removed }}</td></tr><tr><th>Final rows</th><td>{{ results.cleaning.final_rows }}</td></tr>
+  </tbody></table></div><p><a href="{{ results.dataset.page }}" target="_blank" rel="noopener">UCI dataset source</a> · <a href="{{ results.dataset.doi }}" target="_blank" rel="noopener">Dataset DOI</a></p></section>
+  <section class="panel"><div class="section-head"><h2>Preprocessing techniques</h2><span class="badge">REQUIREMENT: 2+</span></div><ol class="analysis-list">{% for step in results.preprocessing %}<li>{{ step }}</li>{% endfor %}</ol></section>
+  <section class="analysis-chart-grid">
+    <figure class="panel"><img src="{{ url_for('static', filename='analysis/amount_histogram.png') }}" alt="Histogram of credit amounts"><figcaption>Histogram: credit amount distribution</figcaption></figure>
+    <figure class="panel"><img src="{{ url_for('static', filename='analysis/duration_boxplot.png') }}" alt="Boxplot of credit duration by risk"><figcaption>Boxplot: duration by credit-risk outcome</figcaption></figure>
+    <figure class="panel wide"><img src="{{ url_for('static', filename='analysis/correlation_heatmap.png') }}" alt="Correlation heatmap"><figcaption>Heatmap: numeric correlations</figcaption></figure>
+    <figure class="panel"><img src="{{ url_for('static', filename='analysis/class_balance.png') }}" alt="Class balance count plot"><figcaption>Countplot: good vs. bad risk balance</figcaption></figure>
+    <figure class="panel"><img src="{{ url_for('static', filename='analysis/feature_importance.png') }}" alt="Random Forest feature importance"><figcaption>Bar chart: Random Forest feature importance</figcaption></figure>
+  </section>
+  <section class="panel"><div class="section-head"><h2>Model comparison</h2><span class="badge">2 ML ALGORITHMS</span></div><div class="table-wrap"><table><thead><tr><th>Model</th><th>Accuracy</th><th>Precision</th><th>Recall</th><th>F1</th></tr></thead><tbody>
+    <tr><td>Logistic Regression</td><td>{{ '%.3f'|format(results.models.logistic_regression.accuracy) }}</td><td>{{ '%.3f'|format(results.models.logistic_regression.precision) }}</td><td>{{ '%.3f'|format(results.models.logistic_regression.recall) }}</td><td>{{ '%.3f'|format(results.models.logistic_regression.f1) }}</td></tr>
+    <tr><td>Random Forest</td><td>{{ '%.3f'|format(results.models.random_forest.accuracy) }}</td><td>{{ '%.3f'|format(results.models.random_forest.precision) }}</td><td>{{ '%.3f'|format(results.models.random_forest.recall) }}</td><td>{{ '%.3f'|format(results.models.random_forest.f1) }}</td></tr>
+  </tbody></table></div><p class="muted">Positive class: bad credit risk. Both models use the same stratified test set.</p></section>
+  {% endif %}
+</main>
+<footer>Balance · Personal Finance Dashboard + Data Science Midterm</footer>
+</body></html>

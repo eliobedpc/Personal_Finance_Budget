@@ -1,5 +1,7 @@
 from datetime import date, datetime
 from io import BytesIO
+from pathlib import Path
+import json
 
 from flask import Flask, jsonify, render_template, request, send_file
 from openpyxl import Workbook, load_workbook
@@ -7,6 +9,7 @@ from openpyxl.styles import Font, PatternFill
 import requests
 
 app = Flask(__name__)
+BASE_DIR = Path(__file__).resolve().parent
 app.config["MAX_CONTENT_LENGTH"] = 2 * 1024 * 1024
 
 DEFAULT_CATEGORIES = ["Housing", "Food", "Transport", "Entertainment", "Utilities", "Other"]
@@ -312,6 +315,18 @@ def build_spreadsheet(transactions, budget, savings_goal=0, savings_saved=0):
 @app.route("/")
 def dashboard():
     return render_template("dashboard.html")
+
+
+@app.route("/analysis")
+def data_science_analysis():
+    results_path = BASE_DIR / "static" / "analysis" / "analysis_results.json"
+    results = None
+    if results_path.exists():
+        try:
+            results = json.loads(results_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            results = None
+    return render_template("analysis.html", results=results)
 
 
 @app.route("/api/summary", methods=["POST"])
