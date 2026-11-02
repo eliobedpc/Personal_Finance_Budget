@@ -49,7 +49,7 @@ UCI_DATASET_PAGE = (
 )
 UCI_DATASET_ZIP = (
     "https://archive.ics.uci.edu/static/public/573/"
-    "south+german+credit.zip"
+    "south%2Bgerman%2Bcredit%2Bupdate.zip"
 )
 UCI_DOI = "https://doi.org/10.24432/C5QG88"
 
@@ -107,6 +107,12 @@ NUMERIC_COLUMNS = [
 
 
 def acquire_dataset():
+    """
+    Load the South German Credit dataset.
+
+    If a local CSV already exists, use it. Otherwise, download the official
+    UCI ZIP archive directly and save a local CSV copy for reproducibility.
+    """
     DATA_DIR.mkdir(parents=True, exist_ok=True)
 
     if DATA_FILE.exists():
