@@ -30,3 +30,284 @@
 @media(max-width:800px){.savings-summary{align-items:flex-start;flex-direction:column}.chart-label{align-items:flex-start}.chart-value{flex-wrap:wrap;justify-content:flex-end}}
 
 #savings-form > button{margin-top:16px}
+
+
+/* =========================================================
+   DATA SCIENCE / MACHINE LEARNING ANALYSIS PAGE
+   Extends the existing Balance dashboard design.
+   ========================================================= */
+
+/* Header navigation for the analysis page */
+.header-links{
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    gap:12px;
+    flex-wrap:wrap;
+}
+
+.nav-link{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:38px;
+    padding:7px 13px;
+    border-radius:7px;
+    font-size:12px;
+    font-weight:650;
+    text-decoration:none;
+    white-space:nowrap;
+}
+
+.nav-link:hover{
+    filter:brightness(.97);
+}
+
+/* Analysis summary cards */
+.analysis-stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:16px;
+    margin:8px 0 25px;
+}
+
+.analysis-stats article{
+    min-width:0;
+}
+
+.analysis-stats p{
+    margin:0 0 12px;
+    color:#586e63;
+    font-size:12px;
+}
+
+.analysis-stats strong{
+    display:block;
+    font-size:clamp(22px,2.4vw,30px);
+    line-height:1.15;
+    letter-spacing:-.8px;
+    color:#174f40;
+    overflow-wrap:anywhere;
+}
+
+.analysis-stats small{
+    display:block;
+    margin-top:10px;
+    color:#62776b;
+    font-size:11px;
+    line-height:1.5;
+}
+
+/* Analysis page panels */
+.analysis-empty{
+    margin-top:24px;
+    text-align:left;
+}
+
+.analysis-empty pre{
+    margin:16px 0;
+    padding:14px 16px;
+    border:1px solid #dce5de;
+    border-radius:9px;
+    background:#f6f9f6;
+    color:#174f40;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+    font-size:13px;
+    overflow-x:auto;
+}
+
+.analysis-empty p{
+    color:#61736b;
+    line-height:1.6;
+}
+
+/* Dataset / cleaning table */
+.analysis-table-wrap{
+    overflow-x:auto;
+    margin-top:14px;
+}
+
+.analysis-table-wrap table{
+    margin-top:0;
+}
+
+.analysis-table-wrap th{
+    width:65%;
+    text-transform:none;
+    letter-spacing:0;
+    font-size:12px;
+    color:#566d61;
+    font-weight:650;
+}
+
+.analysis-table-wrap td{
+    text-align:right;
+    font-weight:700;
+    color:#174f40;
+}
+
+/* Links inside analysis cards */
+.panel a{
+    color:#174f40;
+    font-weight:700;
+    text-decoration:none;
+}
+
+.panel a:hover{
+    text-decoration:underline;
+}
+
+/* Preprocessing list */
+.analysis-list{
+    margin:14px 0 0;
+    padding-left:22px;
+}
+
+.analysis-list li{
+    margin:10px 0;
+    padding-left:4px;
+    color:#40564d;
+    font-size:13px;
+    line-height:1.65;
+}
+
+.analysis-list li::marker{
+    color:#43886c;
+    font-weight:800;
+}
+
+/* Generated EDA / ML charts */
+.analysis-chart-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:24px;
+    margin:24px 0;
+}
+
+.analysis-chart-grid figure{
+    margin:0;
+    min-width:0;
+}
+
+.analysis-chart-grid figure.wide{
+    grid-column:1 / -1;
+}
+
+.analysis-chart-grid img{
+    display:block;
+    width:100%;
+    max-width:100%;
+    height:auto;
+    border-radius:9px;
+    border:1px solid #e4ebe6;
+    background:#fff;
+}
+
+.analysis-chart-grid figcaption{
+    margin-top:13px;
+    color:#5d7167;
+    font-size:12px;
+    line-height:1.5;
+    text-align:center;
+    font-weight:650;
+}
+
+/* Model comparison table */
+.analysis-chart-grid + .panel{
+    margin-top:0;
+}
+
+.panel .table-wrap table{
+    min-width:620px;
+}
+
+.panel .table-wrap tbody tr:hover{
+    background:#f8faf8;
+}
+
+.panel .table-wrap td:first-child{
+    color:#174f40;
+    font-weight:700;
+}
+
+.panel .table-wrap td:not(:first-child){
+    font-variant-numeric:tabular-nums;
+}
+
+/* Make requirement badges fit cleanly */
+.section-head .badge{
+    flex:0 0 auto;
+    white-space:nowrap;
+}
+
+/* Data Science page spacing */
+.analysis-stats + .panel,
+.analysis-chart-grid + .panel,
+main > .panel + .panel{
+    margin-top:24px;
+}
+
+/* Responsive behavior for Data Science page */
+@media(max-width:900px){
+    .analysis-stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:800px){
+    .header-links{
+        width:100%;
+        justify-content:flex-start;
+    }
+
+    header{
+        align-items:flex-start;
+        gap:16px;
+        flex-wrap:wrap;
+    }
+
+    .analysis-chart-grid{
+        grid-template-columns:1fr;
+    }
+
+    .analysis-chart-grid figure.wide{
+        grid-column:auto;
+    }
+
+    .section-head{
+        align-items:flex-start;
+        flex-wrap:wrap;
+    }
+}
+
+@media(max-width:430px){
+    .analysis-stats{
+        grid-template-columns:1fr;
+        gap:10px;
+    }
+
+    .analysis-stats .panel{
+        padding:18px;
+    }
+
+    .analysis-stats strong{
+        font-size:24px;
+    }
+
+    .header-links{
+        gap:8px;
+    }
+
+    .nav-link{
+        width:100%;
+    }
+
+    .analysis-chart-grid{
+        gap:16px;
+        margin-top:16px;
+    }
+
+    .analysis-chart-grid figcaption{
+        text-align:left;
+    }
+}
