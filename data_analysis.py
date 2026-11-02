@@ -26,7 +26,7 @@ MODEL_DIR = BASE_DIR / "models"
 REPORT_DIR = BASE_DIR / "report"
 DATA_FILE = DATA_DIR / "south_german_credit.csv"
 RESULTS_FILE = OUTPUT_DIR / "analysis_results.json"
-UCI_DATASET_ID = 522
+UCI_DATASET_ID = 573
 UCI_DATASET_PAGE = "https://archive.ics.uci.edu/dataset/522/south+german+credit"
 UCI_DOI = "https://doi.org/10.24432/C5X89F"
 
